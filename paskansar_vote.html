@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Pemilihan Ketua PASKANSAR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c5530, #4a7c59);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            min-height: 80vh;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a20, #2c5530);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 4px solid white;
+            object-fit: cover;
+        }
+
+        .org-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .org-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .candidates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .candidate-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-color: #4CAF50;
+        }
+
+        .candidate-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 4px solid #4CAF50;
+        }
+
+        .candidate-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 15px;
+        }
+
+        .candidate-info {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .visi-misi h4 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .visi-misi p, .visi-misi li {
+            line-height: 1.6;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .visi-misi ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c5530;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .voting-container {
+            text-align: center;
+        }
+
+        .voter-info {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .vote-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .vote-card {
+            background: white;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .vote-card:hover {
+            border-color: #4CAF50;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.2);
+        }
+
+        .vote-card.selected {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+        }
+
+        .vote-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 3px solid #4CAF50;
+        }
+
+        .results-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #e9ecef;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: white;
+        }
+
+        .result-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 2px solid #4CAF50;
+        }
+
+        .result-info h3 {
+            color: #2c5530;
+            margin-bottom: 5px;
+        }
+
+        .progress-container {
+            padding: 0 20px 20px;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border-radius: 15px;
+            transition: width 0.8s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #2c5530;
+        }
+
+        .total-votes {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c5530, #4a7c59);
+            color: white;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .candidates-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .vote-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .org-title {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Halaman Utama -->
+        <div id="home-page" class="page active">
+            <div class="header">
+                <button class="back-btn" onclick="adminLogin()">Admin Panel</button>
+                <img src="https://iili.io/KlvTLoQ.md.jpg" alt="Logo PASKANSAR" class="logo">
+                <h1 class="org-title">PASKANSAR</h1>
+                <p class="org-subtitle">Portal Pemilihan Ketua Organisasi Pecinta Alam Digital</p>
+            </div>
+            <div class="content" style="text-align: center;">
+                <h2 style="margin-bottom: 30px; color: #2c5530;">Selamat Datang di Sistem Pemilihan Digital</h2>
+                <p style="font-size: 1.1rem; margin-bottom: 40px; color: #666; line-height: 1.6;">
+                    Sistem pemilihan ketua organisasi PASKANSAR yang transparan dan modern. 
+                    Mari berpartisipasi dalam menentukan pemimpin organisasi pecinta alam kita.
+                </p>
+                <button class="btn-primary" onclick="showCandidates()">Calon Ketua PASKANSAR</button>
+            </div>
+        </div>
+
+        <!-- Halaman Profil Calon -->
+        <div id="candidates-page" class="page">
+            <button class="back-btn" onclick="showHome()">← Kembali</button>
+            <div class="header">
+                <h1 class="org-title">Profil Calon Ketua</h1>
+                <p class="org-subtitle">Kenali visi dan misi para calon pemimpin PASKANSAR</p>
+            </div>
+            <div class="content">
+                <div class="candidates-grid">
+                    <!-- Calon 1: Rahel -->
+                    <div class="candidate-card">
+                        <img src="https://iili.io/KlvAJ29.md.png" alt="Foto Rahel" class="candidate-photo">
+                        <h3 class="candidate-name">Rahel</h3>
+                        <div class="candidate-info">
+                            <div class="visi-misi">
+                                <h4>🎯 VISI</h4>
+                                <p>Meningkatkan kesadaran lingkungan di kalangan siswa.</p>
+                                
+                                <h4 style="margin-top: 20px;">🚀 MISI</h4>
+                                <ul>
+                                    <li>Mengadakan kegiatan bersih-bersih alam secara rutin</li>
+                                    <li>Mengedukasi masyarakat tentang pentingnya pelestarian alam</li>
+                                    <li>Menjalin kerja sama dengan organisasi lingkungan lainnya</li>
+                                    <li>Meningkatkan partisipasi anggota dalam kegiatan organisasi</li>
+                                    <li>Meningkatkan kualitas kegiatan yang diadakan oleh PASKANSAR</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calon 2: Gigih -->
+                    <div class="candidate-card">
+                        <img src="https://iili.io/Klvuy1S.png" alt="Foto Gigih" class="candidate-photo">
+                        <h3 class="candidate-name">Gigih</h3>
+                        <div class="candidate-info">
+                            <div class="visi-misi">
+                                <h4>🎯 VISI</h4>
+                                <p>Membangun komunitas pecinta alam yang solid dan berkelanjutan.</p>
+                                
+                                <h4 style="margin-top: 20px;">🚀 MISI</h4>
+                                <ul>
+                                    <li>Meningkatkan jumlah anggota aktif melalui program rekrutmen yang menarik</li>
+                                    <li>Mengadakan pelatihan dan workshop tentang kegiatan alam</li>
+                                    <li>Memperkuat jaringan dengan komunitas pecinta alam lainnya</li>
+                                    <li>Meningkatkan kesadaran lingkungan di kalangan siswa</li>
+                                    <li>Meningkatkan kualitas kegiatan yang diadakan oleh PASKANSAR</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="btn-primary" onclick="startVoting()">Mulai Pemilihan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Verifikasi -->
+        <div id="verification-page" class="page">
+            <button class="back-btn" onclick="showCandidates()">← Kembali</button>
+            <div class="header">
+                <h1 class="org-title">Verifikasi Pemilih</h1>
+                <p class="org-subtitle">Masukkan data diri untuk melakukan pemilihan</p>
+            </div>
+            <div class="content">
+                <div class="form-container">
+                    <form id="voter-form">
+                        <div class="form-group">
+                            <label for="voter-name">Nama Lengkap:</label>
+                            <input type="text" id="voter-name" name="voter-name" required 
+                                   placeholder="Masukkan nama lengkap Anda">
+                        </div>
+                        <div class="form-group">
+                            <label for="voter-class">Kelas:</label>
+                            <input type="text" id="voter-class" name="voter-class" required 
+                                   placeholder="Contoh: XI-A, XII-IPA 2, dst.">
+                        </div>
+                        <div style="text-align: center;">
+                            <button type="submit" class="btn-primary">Lanjut ke Pemilihan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Voting -->
+        <div id="voting-page" class="page">
+            <div class="header">
+                <h1 class="org-title">Pemilihan Ketua PASKANSAR</h1>
+                <p class="org-subtitle">Pilih calon ketua yang Anda dukung</p>
+            </div>
+            <div class="content">
+                <div class="voting-container">
+                    <div class="voter-info">
+                        <h3>Pemilih:</h3>
+                        <p id="current-voter-info"></p>
+                    </div>
+                    
+                    <h2 style="margin-bottom: 30px; color: #2c5530;">Silakan Pilih Calon Anda:</h2>
+                    
+                    <div class="vote-buttons" id="vote-options">
+                        <div class="vote-card" onclick="selectCandidate('rahel')">
+                            <img src="https://iili.io/KlvAJ29.md.png" alt="Foto Rahel" class="vote-photo">
+                            <h3>Rahel</h3>
+                            <p>Meningkatkan kesadaran lingkungan</p>
+                        </div>
+                        
+                        <div class="vote-card" onclick="selectCandidate('gigih')">
+                            <img src="https://iili.io/Klvuy1S.png" alt="Foto Gigih" class="vote-photo">
+                            <h3>Gigih</h3>
+                            <p>Membangun komunitas yang solid</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 40px;">
+                        <button id="confirm-vote-btn" class="btn-primary" onclick="confirmVote()" disabled>
+                            Konfirmasi Pilihan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Ringkasan Suara -->
+        <div id="summary-page" class="page">
+            <button class="back-btn" onclick="showHome()">← Ke Beranda</button>
+            <div class="header">
+                <h1 class="org-title">Terima Kasih!</h1>
+                <p class="org-subtitle">Total suara yang sudah masuk</p>
+            </div>
+            <div class="content" style="text-align:center">
+                <div class="total-votes">
+                    <h2>Total Suara Masuk</h2>
+                    <h1 id="total-votes-summary">0</h1>
+                </div>
+
+                
+                <button class="btn-primary" onclick="showCandidates()">Pemilih Selanjutnya --></button>
+                <div style="margin-top:20px">
+                    <button class="btn-primary" onclick="adminLogin()">Admin Panel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Hasil -->
+        <div id="results-page" class="page">
+            <button class="back-btn" onclick="showHome()">← Ke Beranda</button>
+            <div class="header">
+                <h1 class="org-title">Hasil Pemilihan</h1>
+                <p class="org-subtitle">Rekapitulasi hasil pemilihan secara real-time</p>
+            </div>
+            <div class="content">
+                <div class="results-container">
+                    <div class="total-votes">
+                        <h2>Total Suara Masuk</h2>
+                        <h1 id="total-votes-count">0</h1>
+                        <p>dari seluruh pemilih yang berpartisipasi</p>
+                    </div>
+                    
+                    <div id="results-chart">
+                        <!-- Hasil Rahel -->
+                        <div class="result-item">
+                            <div class="result-header">
+                                <img src="https://iili.io/KlvAJ29.md.png" alt="Foto Rahel" class="result-photo">
+                                <div class="result-info">
+                                    <h3>Rahel</h3>
+                                    <p>Meningkatkan kesadaran lingkungan</p>
+                                </div>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div id="rahel-progress" class="progress-fill" style="width: 0%;">
+                                        <span id="rahel-percentage">0%</span>
+                                    </div>
+                                </div>
+                                <p style="margin-top: 10px; font-weight: bold;">
+                                    Suara: <span id="rahel-votes">0</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Hasil Gigih -->
+                        <div class="result-item">
+                            <div class="result-header">
+                                <img src="https://iili.io/Klvuy1S.png" alt="Foto Gigih" class="result-photo">
+                                <div class="result-info">
+                                    <h3>Gigih</h3>
+                                    <p>Membangun komunitas yang solid</p>
+                                </div>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div id="gigih-progress" class="progress-fill" style="width: 0%;">
+                                        <span id="gigih-percentage">0%</span>
+                                    </div>
+                                </div>
+                                <p style="margin-top: 10px; font-weight: bold;">
+                                    Suara: <span id="gigih-votes">0</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button class="btn-secondary" onclick="showVoterList()">Lihat Daftar Pemilih</button>
+                        <button class="btn-primary" onclick="startVoting()">Pemilih Selanjutnya</button>
+                        <button class="btn-primary" onclick="resetElection()">reset</button>  
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Daftar Pemilih -->
+        <div id="voter-list-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+                <h2 style="margin-bottom: 20px; color: #2c5530;">Daftar Pemilih</h2>
+                <div id="voter-list-content"></div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn-secondary" onclick="closeVoterList()">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+  import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6lnBBMA2dLLQx7EUc7127p0d0av_L4Ws",
+    authDomain: "paskansar-vote.firebaseapp.com",
+    databaseURL: "https://paskansar-vote-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "paskansar-vote",
+    storageBucket: "paskansar-vote.firebasestorage.app",
+    messagingSenderId: "460892354307",
+    appId: "1:460892354307:web:9110f0204f7737e8611b36",
+    measurementId: "G-B8PQVBFTHN"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getDatabase(app);
+
+  // expose ke global agar bisa dipakai di <script> biasa
+window.db = db;
+window.ref = ref;
+window.push = push;
+window.set = set;
+
+</script>
+    <script>
+        // Data storage
+        let votes = {
+            rahel: 0,
+            gigih: 0
+        };
+        
+        let voters = [];
+        let currentVoter = null;
+        let selectedCandidate = null;
+
+        // Navigation functions
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function showHome() {
+            showPage('home-page');
+        }
+
+        function showCandidates() {
+            showPage('candidates-page');
+        }
+
+        function startVoting() {
+            showPage('verification-page');
+            document.getElementById('voter-form').reset();
+        }
+
+        function showVoting() {
+            showPage('voting-page');
+            document.getElementById('current-voter-info').textContent = 
+                `${currentVoter.name} - ${currentVoter.class}`;
+            
+            // Reset selection
+            selectedCandidate = null;
+            document.querySelectorAll('.vote-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById('confirm-vote-btn').disabled = true;
+        }
+
+        function showResults() {
+            showPage('results-page');
+            updateResults();
+        }
+
+        // Voting functions
+        document.getElementById('voter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('voter-name').value.trim();
+            const voterClass = document.getElementById('voter-class').value.trim();
+            
+            if (name && voterClass) {
+                // Check if voter already voted
+                const existingVoter = voters.find(v => 
+                    v.name.toLowerCase() === name.toLowerCase() && 
+                    v.class.toLowerCase() === voterClass.toLowerCase()
+                );
+                
+                if (existingVoter) {
+                    alert('Pemilih dengan nama dan kelas tersebut sudah melakukan pemilihan!');
+                    return;
+                }
+                
+                currentVoter = { name, class: voterClass };
+                showVoting();
+            }
+        });
+
+        function selectCandidate(candidate) {
+            selectedCandidate = candidate;
+            
+            // Update UI
+            document.querySelectorAll('.vote-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            event.target.closest('.vote-card').classList.add('selected');
+            document.getElementById('confirm-vote-btn').disabled = false;
+        }
+
+        async function confirmVote() {
+    if (!selectedCandidate || !currentVoter) {
+        alert('Terjadi kesalahan. Silakan coba lagi.');
+        return;
+    }
+    
+    const confirmed = confirm(
+        `Anda yakin memilih ${selectedCandidate === 'rahel' ? 'Rahel' : 'Gigih'}?\n\n` +
+        `Nama: ${currentVoter.name}\n` +
+        `Kelas: ${currentVoter.class}\n\n` +
+        `Pilihan tidak dapat diubah setelah dikonfirmasi.`
+    );
+    
+    if (confirmed) {
+        // Record vote di memori
+        votes[selectedCandidate]++;
+        voters.push({
+            ...currentVoter,
+            vote: selectedCandidate,
+            timestamp: new Date().toISOString()
+        });
+
+        // Simpan ke localStorage
+        localStorage.setItem('paskansar_votes', JSON.stringify(votes));
+        localStorage.setItem('paskansar_voters', JSON.stringify(voters));
+
+
+        // 🔹 Simpan ke Firebase
+        try {
+            const newVoteRef = push(ref(db, 'votes'));
+            await set(newVoteRef, {
+                name: currentVoter.name,
+                class: currentVoter.class,
+                vote: selectedCandidate,
+                timestamp: Date.now()
+            });
+            console.log("Vote berhasil dikirim ke Firebase!");
+            alert("Vote Anda berhasil disimpan di server.");
+        } catch (error) {
+            console.error("Gagal simpan ke Firebase:", error);
+            alert("Terjadi error saat menyimpan ke server: " + error.message);
+
+        }
+
+        alert('Terima kasih telah memberikan suara Anda!');
+        showSummary();
+    }
+}
+
+
+        // fungsi baru boya
+        function showSummary() {
+            showPage('summary-page');
+            document.getElementById('total-votes-summary').textContent = votes.rahel + votes.gigih;
+        }
+        function adminLogin() {
+            const pass = prompt('Masukkan password admin:');
+            if (pass === 'admin123') {
+                showResults();
+            } else {
+                alert('Password salah!');
+            }
+        }
+
+        // Results functions
+        function updateResults() {
+            const totalVotes = votes.rahel + votes.gigih;
+            document.getElementById('total-votes-count').textContent = totalVotes;
+            
+            if (totalVotes > 0) {
+                const rahelPercentage = Math.round((votes.rahel / totalVotes) * 100);
+                const gigihPercentage = Math.round((votes.gigih / totalVotes) * 100);
+                
+                // Update Rahel
+                document.getElementById('rahel-votes').textContent = votes.rahel;
+                document.getElementById('rahel-percentage').textContent = `${rahelPercentage}%`;
+                document.getElementById('rahel-progress').style.width = `${rahelPercentage}%`;
+                
+                // Update Gigih
+                document.getElementById('gigih-votes').textContent = votes.gigih;
+                document.getElementById('gigih-percentage').textContent = `${gigihPercentage}%`;
+                document.getElementById('gigih-progress').style.width = `${gigihPercentage}%`;
+            } else {
+                // No votes yet
+                document.getElementById('rahel-votes').textContent = '0';
+                document.getElementById('rahel-percentage').textContent = '0%';
+                document.getElementById('rahel-progress').style.width = '0%';
+                
+                document.getElementById('gigih-votes').textContent = '0';
+                document.getElementById('gigih-percentage').textContent = '0%';
+                document.getElementById('gigih-progress').style.width = '0%';
+            }
+        }
+
+        function showVoterList() {
+            const modal = document.getElementById('voter-list-modal');
+            const content = document.getElementById('voter-list-content');
+            
+            if (voters.length === 0) {
+                content.innerHTML = '<p style="text-align: center; color: #666;">Belum ada pemilih yang terdaftar.</p>';
+            } else {
+                let html = '<div style="max-height: 400px; overflow-y: auto;">';
+                html += '<table style="width: 100%; border-collapse: collapse;">';
+                html += '<thead><tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">';
+                html += '<th style="padding: 10px; text-align: left;">No.</th>';
+                html += '<th style="padding: 10px; text-align: left;">Nama</th>';
+                html += '<th style="padding: 10px; text-align: left;">Kelas</th>';
+                html += '<th style="padding: 10px; text-align: left;">Pilihan</th>';
+                html += '<th style="padding: 10px; text-align: left;">Waktu</th>';
+                html += '</tr></thead><tbody>';
+                
+                voters.forEach((voter, index) => {
+                    const time = new Date(voter.timestamp).toLocaleString('id-ID');
+                    const candidate = voter.vote === 'rahel' ? 'Rahel' : 'Gigih';
+                    html += `<tr style="border-bottom: 1px solid #dee2e6;">`;
+                    html += `<td style="padding: 8px;">${index + 1}</td>`;
+                    html += `<td style="padding: 8px;">${voter.name}</td>`;
+                    html += `<td style="padding: 8px;">${voter.class}</td>`;
+                    html += `<td style="padding: 8px; font-weight: bold; color: #4CAF50;">${candidate}</td>`;
+                    html += `<td style="padding: 8px; font-size: 0.9rem;">${time}</td>`;
+                    html += `</tr>`;
+                });
+                
+                html += '</tbody></table></div>';
+                content.innerHTML = html;
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeVoterList() {
+            document.getElementById('voter-list-modal').style.display = 'none';
+        }
+
+        // Initialize data from localStorage
+        function loadData() {
+            const savedVotes = localStorage.getItem('paskansar_votes');
+            const savedVoters = localStorage.getItem('paskansar_voters');
+            
+            if (savedVotes) {
+                votes = JSON.parse(savedVotes);
+            }
+            
+            if (savedVoters) {
+                voters = JSON.parse(savedVoters);
+            }
+        }
+
+        // Reset data (for admin purposes)
+        async function resetElection() {
+    if (confirm('Apakah Anda yakin ingin mereset semua data pemilihan? Tindakan ini tidak dapat dibatalkan!')) {
+        const adminPassword = prompt('Masukkan password admin:');
+        if (adminPassword === 'admin123') {
+            try {
+                // reset data lokal
+                votes = { rahel: 0, gigih: 0 };
+                voters = [];
+                localStorage.removeItem('paskansar_votes');
+                localStorage.removeItem('paskansar_voters');
+
+                // 🔹 reset data di Firebase
+                await set(ref(db, 'votes'), null);
+                await set(ref(db, 'voters'), null);
+
+                updateResults();
+                alert('Data pemilihan di lokal & Firebase sudah direset!');
+            } catch (error) {
+                console.error("Gagal reset Firebase:", error);
+                alert("Terjadi error saat reset server: " + error.message);
+            }
+        } else {
+            alert('Password admin salah!');
+        }
+    }
+}
+
+
+        // Keyboard shortcut for admin reset (Ctrl+Alt+R)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && e.key === 'r') {
+                e.preventDefault();
+                resetElection();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('voter-list-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVoterList();
+            }
+        });
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateResults();
+        });
+    </script>
+</body>
+</html>
